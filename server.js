@@ -1,4 +1,5 @@
 var express = require("express");
+var logger = require("morgan");
 var mongoose = require("mongoose");
 
 // Our scraping tools
@@ -10,18 +11,25 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = process.env.PORT || 3000;
+var PORT = 3000;
 
 // Initialize Express
 var app = express();
 
 // Configure middleware
 
+// Use morgan logger for logging requests
+app.use(logger("dev"));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
+
+// Connect to the Mongo DB
+mongoose.connect("mongodb://localhost/Article", {
+  useNewUrlParser: true,
+});
 
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
@@ -37,11 +45,17 @@ app.get("/scrape", function(req, res) {
     var $ = cheerio.load(response.data);
 
     // Now, we grab every h2 within an article tag, and do the following:
-    $("div.story-text").each(function (i, element) {
-     // Save the text and href of each link enclosed in the current element
-      var title = $(element).children("h2").text();
-      var link = $(element).children("a").attr("href");
-      var summary = $(element).children("p").text();
+    $("h3.title").each(function(i, element) {
+      // Save an empty result object
+      var result = {};
+
+      // Add the text and href of every link, and save them as properties of the result object
+      result.title = $(this)
+        .parent("a")
+        .text();
+      result.link = $(this)
+        .parent("a")
+        .attr("href");
 
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)
