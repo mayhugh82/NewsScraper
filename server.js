@@ -26,14 +26,14 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-// Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/Article", {
-  useNewUrlParser: true,
-});
+//Connect to the Mongo DB
+//mongoose.connect("mongodb://localhost/Article", {
+  //useNewUrlParser: true,});
 
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Article";
+
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
@@ -59,6 +59,7 @@ app.get("/scrape", function(req, res) {
      result.teaser = $(this).parent("a").siblings("a").children("p").text();
 
       // Create a new Article using the `result` object built from scraping
+      if(result.title && result.link && result.teaser) {
       db.Article.create(result)
         .then(function(dbArticle) {
           // View the added result in the console
@@ -67,7 +68,9 @@ app.get("/scrape", function(req, res) {
         .catch(function(err) {
           // If an error occurred, log it
           console.log(err);
+        
         });
+      }
     });
 
     // Send a message to the client
