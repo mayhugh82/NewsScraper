@@ -79,3 +79,14 @@ $(document).on("click", "#savenote", function () {
   $("#titleinput").val("");
   $("#bodyinput").val("");
 });
+
+$(document).on("click", ".clear", function () {
+  $("#articles").hide();
+});
+
+$(document).on("click", ".scrape-new", function () {
+  $("#articles").show();
+  $.get("/scrape", function (data) {
+    console.log("scraped");
+  });
+});
