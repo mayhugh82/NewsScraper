@@ -26,10 +26,6 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-//Connect to the Mongo DB
-//mongoose.connect("mongodb://localhost/Article", {
-  //useNewUrlParser: true,});
-
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/Article";
@@ -68,7 +64,6 @@ app.get("/scrape", function(req, res) {
         .catch(function(err) {
           // If an error occurred, log it
           console.log(err);
-        
         });
       }
     });
