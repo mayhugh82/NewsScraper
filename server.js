@@ -16,7 +16,7 @@ var PORT = process.env.PORT || 3000;
 // Initialize Express
 var app = express();
 
-// Configure middlewares
+// Configure middleware
 
 // Use morgan logger for logging requests
 app.use(logger("dev"));
