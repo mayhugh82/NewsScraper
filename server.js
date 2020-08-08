@@ -103,6 +103,12 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
+app.get("/cleararticles,", function(req, res){
+  db.Article.remove({}).then(function (dbArticle){
+    res.end()
+  });
+});
+
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
