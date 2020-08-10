@@ -86,7 +86,7 @@ $(document).on("click", ".clear", function () {
 
 $(document).on("click", ".scrape-new", function () {
   $("#articles").show();
-  $.get("/scrapehttps://newsscraper-npr.herokuapp.com/scrape", function (data) {
+  $.get("https://newsscraper-npr.herokuapp.com/scrape", function (data) {
     console.log("scraped");
   });
 });
